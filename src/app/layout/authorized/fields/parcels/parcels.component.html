@@ -1,0 +1,6 @@
+<app-action-bar *ngIf="!this.showMode">
+  <app-action-bar-action routerLink="/fields/add">Add</app-action-bar-action>
+  <app-action-bar-action (click)="updateDelete()">Delete</app-action-bar-action>
+  <app-action-bar-action (click)="updateEdit()">Edit</app-action-bar-action>
+</app-action-bar>
+<app-map [polygons]="selectPolygonsCoordinatesSubscriptions$ | async" [polygonClickable]="true" (polygonClickAction)="polygonClick($event)"></app-map>

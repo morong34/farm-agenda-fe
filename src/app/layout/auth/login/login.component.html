@@ -1,0 +1,56 @@
+<div class="container-fluid login-page">
+  <div class="row full-weight">
+    <div class="col-4 left-side no-margin">
+      <span class="login-controls p-3">
+        <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+          <div class="col-12 title">
+            <img class="col-8 tractor-logo" ngSrc="assets/tractor-login.png" alt="until-logon" height="2000" width="2000">
+          </div>
+          <div class="col-12 title">
+          <h3>Login</h3>
+          </div>
+          <div class="form-group">
+            <label for="email" class="p-1">E-mail</label>
+            <input
+              type="email"
+              id="email"
+              class="col-12 form-control"
+              ngModel
+              name="email"
+              required
+              email
+            >
+          </div>
+          <div class="form-group">
+            <label for="password" class="p-1">Password</label>
+            <input
+              type="password"
+              id="password"
+              class="col-12 form-control"
+              ngModel
+              name="password"
+              required
+              minlength="6"
+            >
+          </div>
+          <div class="login-button-container">
+            <button
+              class="btn btn-outline-dark"
+              [disabled]="form.invalid"
+              type="submit"
+            >Login</button>
+            -
+            <button
+              class="btn btn-outline-dark"
+              type="button"
+              (click)="onSwitchMode()">Switch to Sign up
+            </button>
+          </div>
+            <a href="#" class="link-secondary link">Forget Password</a>
+        </form>
+      </span>
+    </div>
+    <img class="col-8 wallpaper" ngSrc="assets/login.jpeg" alt="ceva" height="768" width="1024">
+  </div>
+</div>
+

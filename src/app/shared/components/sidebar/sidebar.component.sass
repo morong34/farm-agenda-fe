@@ -1,0 +1,148 @@
+@import "../../../../../node_modules/bootstrap/scss/bootstrap"
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap')
+
+.sidebar-container
+  display: grid
+  flex-direction: column
+  height: 100vh
+
+  mat-sidenav-container
+    mat-sidenav
+      mat-nav-list mat-list-item
+        list-style-type: none
+        margin: 0
+        padding: 0
+
+        button
+          --c: #F7C04A
+          font-size: 16px
+          border-radius: 0.5em
+          color: white
+          width: 195px
+          height: 3em
+          text-transform: uppercase
+          font-weight: bold
+          font-family: sans-serif
+          letter-spacing: 0.1em
+          text-align: center
+          line-height: 3em
+          position: relative
+          overflow: hidden
+          z-index: 1
+          transition: 0.5s
+          background: #272829
+          border: 0
+
+          &:hover
+            color: black
+            span
+              transform: translateY(0) scale(2)
+
+          span
+            position: absolute
+            width: 25%
+            height: 100%
+            background-color: var(--c)
+            transform: translateY(150%)
+            border-radius: 50%
+            left: calc((var(--n) - 1) * 25%)
+            transition: 0.5s
+            transition-delay: calc((var(--n) - 1) * 0.1s)
+            z-index: -1
+
+          span:nth-child(1)
+            --n: 1
+
+          span:nth-child(2)
+            --n: 2
+
+          span:nth-child(3)
+            --n: 3
+
+          span:nth-child(4)
+            --n: 1
+
+      .sidebar-header
+        position: relative
+        width: 130px
+        height: 120px
+        background: rgba(0, 0, 0, 0)
+        transform: rotate(0deg) skew(0deg) scale(0.8)
+        transition: 0.5s
+        left: 30px
+        top: 15px
+
+        &:hover
+
+          img:nth-child(3)
+            transform: translate(30px, -30px)
+            opacity: 1
+
+          img:nth-child(2)
+            transform: translate(20px, -20px)
+            opacity: 0.6
+
+          img:nth-child(1)
+            transform: translate(10px, -10px)
+            opacity: 0.3
+        img
+          position: absolute
+          width: 100%
+          transition: 0.5s
+
+
+.router-container
+  background: white
+  .header
+    display: grid
+    grid-template-columns: 1fr 1fr 1fr
+    grid-template-rows: 50px
+    grid-template-areas: "title title user"
+    padding: 5px 15px 15px 15px
+    background: #F7C04A
+    .title
+      grid-column: title
+      color: black
+      padding: 10px 5px
+    .user
+      display: flex
+      justify-content: end
+      grid-column: user
+      padding-top: 15px
+      align-items: center
+
+    h2
+      color: #18272F
+      position: relative
+      text-decoration: none
+      font-family: "Lobster",serif
+
+    h2::before
+      content: ''
+      position: absolute
+      width: 19vh
+      height: 4px
+      border-radius: 4px
+      background-color: #18272F
+      bottom: 0
+      left: 0
+      transform-origin: right
+      transform: scaleX(0)
+      transition: transform .3s ease-in-out
+
+    h2:hover::before
+      transform-origin: left
+      transform: scaleX(1)
+
+.mat-expansion-panel-header
+  font-size: 18px
+hr
+  margin: 0
+.mat-expansion-panel-header, .sidebar-header, .mat-drawer, .mat-expansion-panel
+  background-color: #272829
+  color: white
+
+.mat-expansion-panel-header
+  padding: 0 25px !important
+.mat-nav-list
+  color: #E9E8E8

@@ -1,0 +1,86 @@
+<div class="sidebar-container">
+  <mat-sidenav-container class="sidebar-sidenav-container" autosize>
+    <mat-sidenav mode="side" [fixedInViewport]="mobileQuery.matches" [opened]="showSideNav" fixedTopGap="56">
+      <div class="sidebar-header">
+        <img ngSrc="./../../../../assets/logo.png" alt="logo" height="120" width="120"  />
+        <img ngSrc="./../../../../assets/logo.png" alt="logo" height="120" width="120"  />
+        <img ngSrc="./../../../../assets/logo.png" alt="logo" height="120" width="120"  />
+      </div>
+      <div class="sidebar-body">
+        <mat-nav-list>
+          <div *ngFor="let menu of menus">
+            <div *ngIf="!menu.hide">
+              <div [ngSwitch]="menu.type">
+                <mat-list-item
+                  *ngSwitchCase="'itemMenu'"
+                  [routerLink]="menu.disabled ? null : menu.routerLink"
+                  (click)="title(menu)"
+                  [matTooltip]="menu.tooltip"
+                  [disabled]="menu.disabled"
+                >
+                  <button>
+                    <mat-icon>{{ menu.icon }}</mat-icon>
+                    {{ menu.label }}<span></span><span></span><span></span><span></span>
+                  </button>
+                </mat-list-item>
+                <mat-expansion-panel *ngSwitchCase="'expansion'" [disabled]="menu.disabled" [matTooltip]="menu.tooltip">
+                  <mat-expansion-panel-header>
+                    <a class="nav-link center-content">
+                      <mat-icon>{{ menu.icon }}</mat-icon>
+                      {{ menu.label }}
+                    </a>
+                  </mat-expansion-panel-header>
+                  <mat-nav-list
+                    *ngFor="let item of menu.subMenus"
+                    [disabled]="item.disabled"
+                    [routerLink]="item.disabled ? null : item.routerLink"
+                    (click)="title(menu)"
+                  >
+                    <a mat-list-item [matTooltip]="item.tooltip">
+                      <mat-icon>{{ item.icon }}</mat-icon>
+                      {{ item.label }}
+                    </a>
+                  </mat-nav-list>
+                </mat-expansion-panel>
+              </div>
+            </div>
+          </div>
+        </mat-nav-list>
+      </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="router-container">
+      <div class="header">
+        <div class="title">
+          <h2>{{ this.menuTitle }}</h2>
+        </div>
+        <div class="user">
+          <button mat-icon-button class="me-3">
+            <mat-icon matBadge="15" matBadgeColor="warn">notifications</mat-icon>
+          </button>
+          <div class="d-inline-flex position-relative me-3">
+            <img class="rounded-5 shadow-4" [src]="'/assets/img.png'" alt="Avatar" style="width: 40px; height: 40px" />
+          </div>
+          <div ngbDropdown>
+            <a ngbDropdownToggle class="nav-link" role="button" aria-expanded="false">
+              {{ (this.currentUser | async)?.username }}
+            </a>
+            <div ngbDropdownMenu class="dropdown-menu-end">
+              <li><a ngbDropdownItem style="cursor: pointer">User</a></li>
+              <li><a ngbDropdownItem style="cursor: pointer">Fetch Data</a></li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <a ngbDropdownItem style="cursor: pointer" (click)="onLogOut()"
+                  ><i class="fa-solid fa-arrow-right-from-bracket"></i> LogOut</a
+                >
+              </li>
+            </div>
+          </div>
+        </div>
+      </div>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

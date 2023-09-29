@@ -1,0 +1,29 @@
+<span *ngIf="pageIsReady">
+  <mat-table #table [dataSource]="dataSource" class="mat-elevation-z8" [ngStyle]="style" matSort>
+    <ng-container *ngIf="showSelectAll" matColumnDef="select">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox color="primary" (change)="$event ? masterToggle() : null"
+                      [checked]="selection?.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row">
+        <mat-checkbox color="primary" (click)="$event.stopPropagation()" (change)="selection.toggle(row)"
+                      [checked]="selection?.isSelected(row)">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+    <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+      <mat-header-cell *cdkHeaderCellDef mat-sort-header>{{ column.header }}</mat-header-cell>
+      <mat-cell *cdkCellDef="let row">{{ row[column.columnDef] }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="action">
+      <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+      <mat-cell *matCellDef="let element" action-buttons [value]="element" (buttonAction)="onTableAction($event, element)">
+        {{ element.weight }}
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+  <mat-paginator *ngIf="pagination" [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
+</span>

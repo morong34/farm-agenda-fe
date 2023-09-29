@@ -1,0 +1,14 @@
+<div class="container-fluid">
+  <div class="row">
+    <mat-toolbar>
+      <button mat-raised-button routerLink="/cultures">Back</button>
+      <button mat-raised-button (click)="save()">Save Cultures</button>
+      <button *ngIf="mode === FormMode.Edit" mat-raised-button (click)="delete()">Delete Cultures</button>
+    </mat-toolbar>
+  </div>
+</div>
+<div class="row center-content py-2">
+  <div class="col-12">
+    <app-culture-form [mode]="mode" [parcels]="this.parcels"></app-culture-form>
+  </div>
+</div>

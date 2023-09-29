@@ -1,0 +1,15 @@
+<div
+  class="rounded-corners"
+  leaflet
+  [ngStyle]="style || mapStyle"
+  leafletDraw
+  [leafletOptions]="options"
+  (leafletMapReady)="onMapReady($event)"
+  [leafletDrawOptions]="drawOptions"
+  (leafletDrawCreated)="onDrawCreated($event)"
+  (leafletDrawEdited)="onDrawEdited()"
+  (leafletDrawDeleted)="onDrawDeleted()"
+>
+  <div [leafletLayer]="initialDrawn"></div>
+  <div *ngIf="mode === FormMode.Edit || FormMode.Create" [leafletLayer]="drawnItems"></div>
+</div>
