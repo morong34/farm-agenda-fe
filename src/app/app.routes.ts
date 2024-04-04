@@ -4,11 +4,18 @@ import { AuthGuard } from './shared/quards/auth-guard.service';
 
 export const routes: Routes = [
   { path: '', component: DefaultRouteComponent },
-  { path: 'auth', loadChildren: () => import('./layout/auth/auth.module').then((m) => m.AuthModule) },
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./layout/auth/auth.module').then(m => m.AuthModule),
+  },
   {
     path: '',
     canActivate: [AuthGuard],
-    loadChildren: () => import('./layout/authorized/authorized.module').then((m) => m.AuthorizedModule)
+    loadChildren: () =>
+      import('./layout/authorized/authorized.module').then(
+        m => m.AuthorizedModule
+      ),
   },
-  { path: '**', component: DefaultRouteComponent }
+  { path: '**', component: DefaultRouteComponent },
 ];

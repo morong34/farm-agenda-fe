@@ -9,7 +9,7 @@
 (window as any).ENV = {
   env: 'development',
   // API_URL: 'https://farm-app-be.azurewebsites.net'
-  API_URL: 'http://localhost:3000'
+  API_URL: 'http://localhost:3000',
 };
 export const environment = (window as any).ENV;
 

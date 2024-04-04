@@ -1,14 +1,39 @@
-<div class="container-fluid">
-  <div class="row">
-    <mat-toolbar>
-      <button mat-raised-button routerLink="/cultures">Back</button>
-      <button mat-raised-button (click)="save()">Save Cultures</button>
-      <button *ngIf="mode === FormMode.Edit" mat-raised-button (click)="delete()">Delete Cultures</button>
-    </mat-toolbar>
+@if (this.formReady) {
+  <app-action-bar>
+    <app-action-bar-action routerLink="/cultures">
+      <fa-icon [icon]="icons['back']"></fa-icon>
+      Back
+    </app-action-bar-action>
+    <app-action-bar-action (click)="save()">
+      <fa-icon [icon]="icons['save']"></fa-icon>
+      Add Cultures
+    </app-action-bar-action>
+  </app-action-bar>
+  <div class="row center-content py-2">
+    <div class="col-12">
+      <div class="p-2">
+        <div class="white-background rounded-corners">
+          <div [formGroup]="form">
+            <h3 class="inline px-3">Planing Culture</h3>
+            <mat-form-field appearance="outline" class="px-1 py-2">
+              <mat-label>Culture type</mat-label>
+              <mat-select formControlName="culture_type">
+                <mat-option [value]="'maize'">Maize</mat-option>
+                <mat-option [value]="'wheat'">Wheat</mat-option>
+                <mat-option [value]="'rapeseed'">Rapeseed</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <app-map
+          [config]="config"
+          [polygonsToEdit]="
+            selectPolygonsWithoutCultureCoordinatesSubscriptions$ | async
+          ">
+        </app-map>
+      </div>
+    </div>
   </div>
-</div>
-<div class="row center-content py-2">
-  <div class="col-12">
-    <app-culture-form [mode]="mode" [parcels]="this.parcels"></app-culture-form>
-  </div>
-</div>
+} @else {
+  <app-loader></app-loader>
+}

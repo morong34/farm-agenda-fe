@@ -24,6 +24,7 @@
     "types": [
       "leaflet",
       "leaflet-draw",
+      "jest"
     ]
   },
   "angularCompilerOptions": {

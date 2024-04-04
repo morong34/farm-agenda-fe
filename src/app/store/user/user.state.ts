@@ -1,7 +1,7 @@
 import { IUser } from '../../shared/services/user.service';
 
 export const initialUserState: IUserState = {
-  user: null
+  user: null,
 };
 
 export interface IUserState {

@@ -1,12 +1,42 @@
-<div class="container-fluid">
+@if (this.formReady) {
   <div class="row">
-    <div class="col-12 center-content">
-      Edit Culture
+    <div class="center-content">
+      <app-action-bar>
+        <app-action-bar-action routerLink="/cultures">
+          <fa-icon [icon]="icons['back']"></fa-icon>
+          Back
+        </app-action-bar-action>
+      </app-action-bar>
     </div>
   </div>
-</div>
-<div class="row center-content py-2">
-  <div class="col-12">
-    <app-culture-form [mode]="mode" [culture]="culture"></app-culture-form>
+  <div class="row center-content">
+    <div class="culture-grid">
+      <div class="info-culture">
+        <h3>Field data</h3>
+        <div>Parcel Name: {{ field.attributes.name }}</div>
+        <div>
+          TopoGraphic Number:
+          {{ field.attributes.topographic_number }}
+        </div>
+        <div>Autority: in arenda</div>
+        <div>Contract: 10-09-2023</div>
+      </div>
+      <div class="info-precipitation">
+        <h3>General Culture Info</h3>
+        <div>Type: {{ culture.attributes.culture_type }}</div>
+        <div>Stage: planed</div>
+        <div>Sowing date: {{ culture.attributes.sowing_date }}</div>
+        <div>Harvest date: {{ culture.attributes.harvest_date }}</div>
+      </div>
+      <div class="info-treatment">
+        <h3>Cost</h3>
+        <p>ceva3</p>
+      </div>
+    </div>
   </div>
-</div>
+  <div class="row py-2">
+    <h3>Lucrari Agricole</h3>
+  </div>
+} @else {
+  <app-loader></app-loader>
+}

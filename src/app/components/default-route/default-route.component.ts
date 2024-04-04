@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  template: ''
+  template: '',
+  standalone: true,
 })
 export class DefaultRouteComponent implements OnInit {
   constructor(private router: Router) {}
@@ -17,6 +18,6 @@ export class DefaultRouteComponent implements OnInit {
     if (isExpired) {
       return this.router.navigate(['auth/login']);
     }
-    this.router.navigate(['fields/']);
+    this.router.navigate(['parcels/']);
   }
 }

@@ -10,13 +10,13 @@ export const routes: Routes = [
     children: [
       {
         path: 'login',
-        component: LoginComponent
+        component: LoginComponent,
       },
       {
         path: 'registration',
-        component: RegistrationComponent
-      }
-    ]
+        component: RegistrationComponent,
+      },
+    ],
   },
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: 'login' },
 ];

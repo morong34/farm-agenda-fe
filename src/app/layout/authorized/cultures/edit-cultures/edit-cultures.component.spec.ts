@@ -8,7 +8,7 @@ describe('EditCulturesComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [EditCulturesComponent]
+      imports: [EditCulturesComponent],
     });
     fixture = TestBed.createComponent(EditCulturesComponent);
     component = fixture.componentInstance;

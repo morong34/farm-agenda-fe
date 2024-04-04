@@ -6,7 +6,10 @@ import { catchError, map, mergeMap, of } from 'rxjs';
 
 @Injectable()
 export class UserEffects {
-  constructor(private actions$: Actions, private userService: UserService) {}
+  constructor(
+    private actions$: Actions,
+    private userService: UserService
+  ) {}
 
   userRequested$ = createEffect(() => {
     return this.actions$.pipe(
@@ -14,7 +17,7 @@ export class UserEffects {
       mergeMap(() => {
         return this.userService.currentUser().pipe(
           map((user: IUser) => UserLoaded({ user })),
-          catchError((err) => of(UserError(err)))
+          catchError(err => of(UserError(err)))
         );
       })
     );

@@ -1,84 +1,42 @@
+/* eslint-disable prettier/prettier */
 import * as L from 'leaflet';
 
 export const displayedColumns: string[] = ['select', 'position', 'points'];
 
-// MyCustomMarker = L.Icon.extend({
-//   options: {
-//     shadowUrl: null,
-//     iconAnchor: new L.Point(12, 12),
-//     iconSize: new L.Point(24, 24),
-//     iconUrl: 'link/to/image.png'
-//   }
-// });
-
-// drawOptions = {
-//   position: 'topright',
-//   draw: {
-//     polyline: {
-//       shapeOptions: {
-//         color: '#f357a1',
-//         weight: 10
-//       }
-//     },
-//     polygon: {
-//       allowIntersection: false, // Restricts shapes to simple polygons
-//       drawError: {
-//         color: '#e1e100', // Color the shape will turn when intersects
-//         message: "<strong>Oh snap!<strong> you can't draw that!" // Message that will show when intersect
-//       },
-//       shapeOptions: {
-//         color: '#bada55'
-//       }
-//     },
-//     circle: false, // Turns off this drawing tool
-//     rectangle: {
-//       shapeOptions: {
-//         clickable: false
-//       }
-//     },
-//     marker: {
-//       icon: this.MyCustomMarker
-//     }
-//   },
-//   edit: {
-//     featureGroup: this.drawnItems, //REQUIRED!!
-//     remove: false
-//   }
-// };
-
-// drawOptions = {
-//   position: 'bottomright',
-//   draw: {
-//     polyline: false,
-//     rectangle: false,
-//     circle: false,
-//     marker: false,
-//     circlemarker: false
-//   },
-//   edit: {
-//     featureGroup: this.drawnItems
-//   }
-// };
-
-export const greenIcon = L.icon({
-  iconUrl: 'https://png.pngtree.com/png-clipart/20210311/original/pngtree-wheat-icon-design-template-illustration-png-image_5977233.jpg',
-
-  iconSize: [38, 95], // size of the icon
-  shadowSize: [50, 64], // size of the shadow
-  iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-  shadowAnchor: [4, 62], // the same for the shadow
-  popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+const wheatIcon = L.icon({
+  iconSize: [40, 60],
+  iconAnchor: [15, 55],
+  iconUrl: '../../../../assets/icons/wheatIcon.png',
 });
+
+const maizeIcon = L.icon({
+  iconSize: [40, 60],
+  iconAnchor: [15, 55],
+  iconUrl: '../../../../assets/icons/maizeIcon.png',
+});
+
+const empty = L.icon({
+  iconSize: [40, 60],
+  iconAnchor: [15, 55],
+  iconUrl: '../../../../assets/icons/undefined.png',
+});
+
+export const iconsMap = {
+  'maize': maizeIcon,
+  'wheat': wheatIcon,
+  null: empty,
+  undefined: empty
+};
 
 export const optionsMap = {
   layers: [
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
       maxZoom: 18,
-      attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
-    })
+      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+    }),
   ],
-  zoom: 7,
-  center: L.latLng(46.943, 24.115)
+  zoom: 15,
+  center: L.latLng(46.2369, 20.9085),
 };
 
 export const drawOptionsDisabled = {
@@ -89,26 +47,33 @@ export const drawOptionsDisabled = {
     circle: false,
     marker: false,
     circlemarker: false,
-    polygon: false
-  }
+    polygon: false,
+  },
 };
 
-export const LeafIcon = L.Icon.extend({
-  options: {
-    shadowUrl: 'leaf-shadow.png',
-    iconSize: [38, 95],
-    shadowSize: [50, 64],
-    iconAnchor: [22, 94],
-    shadowAnchor: [4, 62],
-    popupAnchor: [-3, -76]
+export const drawOptionsEnabled = (initialDrawn) => {
+  return {
+    position: 'topleft',
+    draw: {
+      polyline: false,
+      rectangle: false,
+      circle: false,
+      marker: false,
+      circlemarker: false,
+      polygon: {
+        allowIntersection: false,
+        drawError: {
+          color: '#e1e100',
+          message: 'Nu-i bine',
+        },
+        shapeOptions: {},
+      },
+    },
+    edit: {
+      featureGroup: initialDrawn,
+      polygon: {
+        allowIntersection: false,
+      },
+    },
   }
-});
-
-export enum MapIcons {
-  // @ts-ignore
-  wheatIcon = new LeafIcon({ iconUrl: 'src/assets/wheat.png' }),
-  // @ts-ignore
-  maizeIcon = new LeafIcon({ iconUrl: 'src/assets/maize.png' }),
-  // @ts-ignore
-  rapeIcon = new LeafIcon({ iconUrl: 'src/assets/rape.png' })
-}
+};

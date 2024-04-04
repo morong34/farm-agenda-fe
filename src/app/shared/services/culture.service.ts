@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpWrapperService } from './http-wrapper.service';
 import { Observable } from 'rxjs';
 import { IParcelResponse } from './parcels.service';
+import { jsonToSearchParams } from '../helpers/search-param-query-encoder/search-param-query-encoder.service';
 
 export interface ICultureAttributes {
   name?: string;
@@ -73,16 +74,22 @@ export class CultureService {
   constructor(private httpWrapper: HttpWrapperService) {}
   defaultInclude = 'parcel,polygon';
 
-  getAll(): Observable<ICulturesResponse> {
-    return this.httpWrapper.get('/api/v1/cultures');
+  getAll(options?: any): Observable<ICulturesResponse> {
+    let params = jsonToSearchParams({
+      ...options['filter'],
+      fields: options['fields'],
+    });
+    return this.httpWrapper.get('/api/v1/cultures', { params });
   }
 
-  getCulturesForUser(id: number): Observable<ICulturesResponse> {
+  getCulturesForUser(id: number, options?: any): Observable<ICulturesResponse> {
     return this.httpWrapper.get(`/api/v1/${id}/cultures`);
   }
 
-  getById(id: number): Observable<ICultureResponse> {
-    return this.httpWrapper.get(`/api/v1/cultures/${id}`, { params: { include: 'parcel' } });
+  getById(id: number, options?: any): Observable<ICultureResponse> {
+    return this.httpWrapper.get(`/api/v1/cultures/${id}`, {
+      params: { include: 'parcel' },
+    });
   }
 
   create(payload): Observable<ICultureResponse> {
@@ -94,6 +101,6 @@ export class CultureService {
   }
 
   delete(id: number) {
-    return this.httpWrapper.delete(`/api/v1/parcels/${id}`);
+    return this.httpWrapper.delete(`/api/v1/cultures/${id}`);
   }
 }

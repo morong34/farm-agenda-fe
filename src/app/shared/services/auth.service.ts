@@ -17,7 +17,10 @@ export interface ISignInParams {
 
 @Injectable()
 export class AuthService {
-  constructor(private httpWrapper: HttpWrapperService, private router: Router) {}
+  constructor(
+    private httpWrapper: HttpWrapperService,
+    private router: Router
+  ) {}
 
   setToken(token: string): void {
     localStorage.setItem('auth_token', token);
@@ -40,14 +43,14 @@ export class AuthService {
     return this.httpWrapper.post('/api/v1/auth/register', {
       data: {
         type: 'user',
-        attributes: params
-      }
+        attributes: params,
+      },
     });
   }
 
   login(params: ILoginParams): Observable<any> {
     return this.httpWrapper.post('/api/v1/auth/sign_in', { user: params }).pipe(
-      catchError((response) => {
+      catchError(response => {
         if (response.status === 451) {
           alert(response);
         }

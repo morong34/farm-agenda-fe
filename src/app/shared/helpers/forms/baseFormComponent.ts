@@ -1,17 +1,23 @@
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { BaseFormController } from './BaseFormController';
-import { FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms';
 import { forEach, get } from 'lodash';
 
 export enum FormMode {
   Edit = 0,
   Create = 1,
-  View = 2
+  View = 2,
 }
 
 @Directive()
 export class BaseFormComponent extends BaseFormController {
-  @Output() onFormReady = new EventEmitter();
+  @Output() FormReady = new EventEmitter();
   @Input() mode: FormMode = FormMode.Create;
 
   constructor(protected formBuilder: FormBuilder) {
@@ -28,13 +34,16 @@ export class BaseFormComponent extends BaseFormController {
     return this.formBuilder.control(
       {
         value: this.getField(location || field, defaultValue),
-        disabled: this.isViewMode() || options.disabled
+        disabled: this.isViewMode() || options.disabled,
       },
       validations
     );
   }
 
-  protected getField(field: string, defaultValue?: ''): string | boolean | number {
+  protected getField(
+    field: string,
+    defaultValue?: ''
+  ): string | boolean | number {
     return field;
   }
 
@@ -72,7 +81,7 @@ export class BaseFormComponent extends BaseFormController {
 
   markAllFieldsAsTouched(form?: FormGroup) {
     const controls = form ? form.controls : this.form.controls;
-    forEach(controls, (control) => {
+    forEach(controls, control => {
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
       }
@@ -99,7 +108,7 @@ export class BaseFormComponent extends BaseFormController {
 
   getDirtyValues(form: any): { [key: string]: string } {
     const dirtyValues = {};
-    Object.keys(form.controls).forEach((key) => {
+    Object.keys(form.controls).forEach(key => {
       const currentControl = form.controls[key];
 
       if (currentControl.dirty) {

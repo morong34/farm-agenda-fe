@@ -1,15 +1,17 @@
 <div
-  class="rounded-corners"
+  class="map"
   leaflet
-  [ngStyle]="style || mapStyle"
+  [ngStyle]="config.map.style"
   leafletDraw
   [leafletOptions]="options"
   (leafletMapReady)="onMapReady($event)"
   [leafletDrawOptions]="drawOptions"
+  (leafletZoomChange)="setZoom($event)"
   (leafletDrawCreated)="onDrawCreated($event)"
-  (leafletDrawEdited)="onDrawEdited()"
-  (leafletDrawDeleted)="onDrawDeleted()"
->
+  (leafletDrawEdited)="onDrawEdited($event)"
+  (leafletDrawDeleted)="onDrawDeleted($event)">
   <div [leafletLayer]="initialDrawn"></div>
-  <div *ngIf="mode === FormMode.Edit || FormMode.Create" [leafletLayer]="drawnItems"></div>
+  @if (config.form.mode === FormMode.Edit || FormMode.Create) {
+    <div [leafletLayer]="drawnItems"></div>
+  }
 </div>

@@ -1,0 +1,19 @@
+<app-action-bar>
+  <app-action-bar-action routerLink="/parcels">
+    <fa-icon [icon]="icons['back']"></fa-icon>
+    Back
+  </app-action-bar-action>
+  <app-action-bar-action (click)="save()">
+    <fa-icon [icon]="icons['save']"></fa-icon>
+    Save Parcels
+  </app-action-bar-action>
+  <app-action-bar-action (click)="delete()">
+    <fa-icon [icon]="icons['trash']"></fa-icon>
+    Delete Parcels
+  </app-action-bar-action>
+</app-action-bar>
+<div class="row center-content py-2">
+  <div class="col-12">
+    <app-parcel-form [config]="config" [parcel]="parcel"></app-parcel-form>
+  </div>
+</div>

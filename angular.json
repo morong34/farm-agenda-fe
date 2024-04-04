@@ -24,16 +24,15 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "sass",
             "aot": true,
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "leaflet"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
-            "styles": [
-              "src/styles.sass",
-              "./node_modules/leaflet/dist/leaflet.css",
-              "./node_modules/leaflet-draw/dist/leaflet.draw.css",
-              "node_modules/bootstrap/dist/css/bootstrap.css"
-            ],
+            "styles": ["src/styles.sass"],
             "scripts": []
           },
           "configurations": {
@@ -78,14 +77,14 @@
         "serve": {
           "builder": "ngx-build-plus:dev-server",
           "options": {
-            "browserTarget": "farm_agenda_client:build"
+            "buildTarget": "farm_agenda_client:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "client:build:production"
+              "buildTarget": "client:build:production"
             },
             "development": {
-              "browserTarget": "client:build:development"
+              "buildTarget": "client:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -93,7 +92,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "client:build"
+            "buildTarget": "client:build"
           }
         },
         "test": {
@@ -109,11 +108,7 @@
               "src/favicon.ico",
               "src/assets"
             ],
-            "styles": [
-              "src/styles.sass",
-              "./node_modules/leaflet/dist/leaflet.css",
-              "./node_modules/leaflet-draw/dist/leaflet.draw.css"
-            ],
+            "styles": ["src/styles.sass"],
             "scripts": []
           }
         },

@@ -1,7 +1,14 @@
-import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormControl,
+  FormGroup,
+} from '@angular/forms';
 import { keys } from 'lodash';
 
-const markAsTouched = (groupOrControl: FormGroup | FormArray | AbstractControl) => {
+const markAsTouched = (
+  groupOrControl: FormGroup | FormArray | AbstractControl
+) => {
   if (!groupOrControl) {
     return;
   }
@@ -11,7 +18,7 @@ const markAsTouched = (groupOrControl: FormGroup | FormArray | AbstractControl) 
     return;
   }
 
-  keys((groupOrControl as FormGroup | FormArray).controls).map((field) => {
+  keys((groupOrControl as FormGroup | FormArray).controls).map(field => {
     const control = groupOrControl.get(field);
 
     if (control instanceof FormControl) {
@@ -25,5 +32,5 @@ const markAsTouched = (groupOrControl: FormGroup | FormArray | AbstractControl) 
 };
 
 export const FormHelpers = {
-  markAsTouched
+  markAsTouched,
 };

@@ -9,5 +9,5 @@ export const appReducers: ActionReducerMap<IAppState> = {
   user: userReducer,
   parcels: parcelsReducer,
   cultures: culturesReducer,
-  polygons: polygonsReducer
+  polygons: polygonsReducer,
 };

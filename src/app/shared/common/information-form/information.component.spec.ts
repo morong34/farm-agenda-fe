@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FieldsInformationComponent } from './information.component';
+import { InformationComponent } from './information.component';
 
-describe('FieldsInformationComponent', () => {
-  let component: FieldsInformationComponent;
-  let fixture: ComponentFixture<FieldsInformationComponent>;
+describe('InformationComponent', () => {
+  let component: InformationComponent;
+  let fixture: ComponentFixture<InformationComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [FieldsInformationComponent]
+      imports: [InformationComponent],
     });
-    fixture = TestBed.createComponent(FieldsInformationComponent);
+    fixture = TestBed.createComponent(InformationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

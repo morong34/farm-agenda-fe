@@ -1,7 +1,7 @@
 import { IParcelsResponse } from '../../shared/services/parcels.service';
 
 export const initialParcelsState: IParcelsState = {
-  parcels: null
+  parcels: null,
 };
 
 export interface IParcelsState {

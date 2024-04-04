@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpWrapperService } from './http-wrapper.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { IPolygon } from './polygons.service';
 
 export interface IParcelsAttributes {
@@ -9,26 +9,25 @@ export interface IParcelsAttributes {
   parcel_id?: string;
   user_id?: string;
   polygon?: IPolygon[];
+  culture?: string;
 }
 
 export interface IParcelsParams {
-  data: {
-    type?: string;
-    id?: string;
-    attributes?: {
-      name?: string;
-      topographic_number?: number;
+  type?: string;
+  id?: string;
+  attributes?: {
+    name?: string;
+    topographic_number?: number;
+  };
+  relationships?: {
+    user?: {
+      data?: {
+        type?: string;
+        id?: string;
+      };
     };
-    relationships?: {
-      user?: {
-        data?: {
-          type?: string;
-          id?: string;
-        };
-      };
-      polygons?: {
-        data?: IPolygon[];
-      };
+    polygons?: {
+      data?: IPolygon[];
     };
   };
 }
@@ -36,7 +35,7 @@ export interface IParcelsParams {
 export interface IParcelResponse {
   data: {
     type?: string;
-    id?: number;
+    id?: string;
     attributes?: IParcelsAttributes;
     relationships?: {
       user?: {
@@ -79,12 +78,12 @@ export interface IParcelsResponse {
           };
         }[];
       };
-    }
+    },
   ];
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ParcelsService {
   constructor(private httpWrapper: HttpWrapperService) {}
@@ -102,8 +101,7 @@ export class ParcelsService {
   }
 
   update(id: number, payload: IParcelsParams): Observable<IParcelsResponse> {
-    debugger;
-    return this.httpWrapper.put(`/api/v1/parcels/${id}`, payload);
+    return this.httpWrapper.put(`/api/v1/parcels/${id}`, { data: payload });
   }
 
   delete(id: number) {

@@ -1,0 +1,21 @@
+@if (!this.showMode) {
+  <app-action-bar>
+    <app-action-bar-action routerLink="/parcels/add">
+      <fa-icon [icon]="icons['mapLocationDot']"></fa-icon>
+      Add
+    </app-action-bar-action>
+    <app-action-bar-action (click)="updateDelete()">
+      <fa-icon [icon]="icons['trash']"></fa-icon>
+      Delete</app-action-bar-action
+    >
+    <app-action-bar-action (click)="updateEdit()">
+      <fa-icon [icon]="icons['save']"></fa-icon>
+      Edit
+    </app-action-bar-action>
+  </app-action-bar>
+}
+<app-map
+  [config]="config"
+  [polygons]="selectPolygonsCoordinatesSubscriptions$ | async"
+  (polygonClickAction)="polygonClick($event)">
+</app-map>

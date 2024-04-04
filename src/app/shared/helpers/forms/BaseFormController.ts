@@ -18,7 +18,11 @@ export class BaseFormController {
     FormHelpers.markAsTouched(groupOrControl);
   }
 
-  objectToFormData(data: { [key: string]: any }, formData = new FormData(), prefix?: string) {
+  objectToFormData(
+    data: { [key: string]: any },
+    formData = new FormData(),
+    prefix?: string
+  ) {
     forEach(data, (value, key) => {
       const fieldKey: string = this.getFormDataKeyForObject(key, prefix);
       if (this.isNestedValue(value)) {
@@ -43,11 +47,17 @@ export class BaseFormController {
   }
 
   private isNestedValue(value) {
-    return isObject(value) && !isArray(value) && !this.isFile(value) && !this.isDate(value) && !this.isBigNumber(value);
+    return (
+      isObject(value) &&
+      !isArray(value) &&
+      !this.isFile(value) &&
+      !this.isDate(value) &&
+      !this.isBigNumber(value)
+    );
   }
 
   private handleArrayToFormData(array: unknown[], formData: FormData, prefix?) {
-    forEach(array, (value) => {
+    forEach(array, value => {
       const key = `${prefix}[]`;
       if (this.isNestedValue(value)) {
         this.objectToFormData(value, formData, key);

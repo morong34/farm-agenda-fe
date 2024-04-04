@@ -1,70 +1,65 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import * as L from 'leaflet';
 import { FeatureGroup, featureGroup } from 'leaflet';
 import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.js';
-import { IUser } from '../../services/user.service';
-import { drawOptionsDisabled, optionsMap } from './const';
-import { isEmpty } from 'lodash';
+import {
+  drawOptionsDisabled,
+  drawOptionsEnabled,
+  iconsMap,
+  optionsMap,
+} from './const';
+import { includes, isEmpty } from 'lodash';
 import { FormMode } from '../../helpers/forms/baseFormComponent';
-import { FormGroup } from '@angular/forms';
+import { NgStyle, NgIf } from '@angular/common';
+import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { config } from 'app/layout/authorized/const';
+import { polygonCoordinates } from 'app/store/polygons/polygons.selectors';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.sass']
+  styleUrls: ['./map.component.sass'],
+  standalone: true,
+  imports: [LeafletModule, LeafletDrawModule, NgStyle, NgIf],
 })
-export class MapComponent implements OnInit, OnChanges {
+export class MapComponent implements OnChanges {
   @Input() polygons: any = [];
   @Input() polygonsToEdit: any = [];
-  @Input() mode: FormMode = FormMode.View;
-  @Input() parentFormGroup: FormGroup;
-  @Input() style: any;
-  @Input() polygonClickable: boolean;
-  @Input() showMarker: boolean;
-  @Output() polygonClickAction: EventEmitter<any> = new EventEmitter<any>();
+  @Input() config: config = {};
+
+  @Output() polygonClickAction: EventEmitter<{
+    polygon?: polygonCoordinates;
+  }> = new EventEmitter<{}>();
   @Output() markerClickAction: EventEmitter<any> = new EventEmitter<any>();
   @Output() drawCreated: EventEmitter<any> = new EventEmitter<any>();
   @Output() drawEdited: EventEmitter<any> = new EventEmitter<any>();
   @Output() drawDeleted: EventEmitter<any> = new EventEmitter<any>();
-  user: IUser;
-  mapValid: boolean = true;
 
   map: L.Map;
+  markers: L.Marker[] = [];
+  lLolygons: L.Polygon[] = [];
+  private _zoom: number;
   initialDrawn: FeatureGroup = featureGroup();
   drawnItems: FeatureGroup = featureGroup();
+  dezactivateEditOption = ['add-culture'];
+  dezactivateMarkerIcon = ['cultures', 'add-culture', 'edit-culture'];
 
   options = optionsMap;
 
-  drawOptionsEnabled = {
-    position: 'topleft',
-    draw: {
-      polyline: false,
-      rectangle: false,
-      circle: false,
-      marker: false,
-      circlemarker: false,
-      polygon: {
-        allowIntersection: false,
-        drawError: {
-          color: '#e1e100',
-          message: 'Nu-i bine'
-        },
-        shapeOptions: {}
-      }
-    },
-    edit: {
-      featureGroup: this.initialDrawn,
-      polygon: {
-        allowIntersection: false
-      }
-    }
-  };
-
   constructor() {}
-  ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
+    this.markers = [];
     if (changes.polygons?.currentValue) {
       this.setPolygons();
     }
@@ -78,77 +73,134 @@ export class MapComponent implements OnInit, OnChanges {
     const polygonCoordinates = polygon.layer.toGeoJSON().geometry;
     polygonCoordinates.type = polygonCoordinates.type.toLocaleLowerCase();
 
-    this.map.eachLayer((layer: L.Polygon) => {
-      if (layer instanceof L.Polygon && !(layer instanceof L.Rectangle) && layer.getBounds().intersects(polygon.layer.getBounds())) {
-        layer.setStyle({ color: 'red' });
-        polygon.layer.setStyle({ color: 'red' });
-        this.mapValid = true;
-      }
-    });
-
     this.drawCreated.emit(polygonCoordinates.coordinates);
-    this.drawnItems.addLayer((polygon as L.DrawEvents.Created).layer);
+    this.config.form.mode === FormMode.Edit
+      ? this.initialDrawn.addLayer((polygon as L.DrawEvents.Created).layer)
+      : this.drawnItems.addLayer((polygon as L.DrawEvents.Created).layer);
   }
 
-  onDrawEdited() {
+  onDrawEdited(polygon: any) {
     let result = [];
-    this.initialDrawn.eachLayer((layer: L.Layer) => {
-      if (layer instanceof L.Polygon && !(layer instanceof L.Rectangle)) {
-        result.push(layer.getLatLngs());
-      }
-    });
 
-    this.drawEdited.emit(result);
+    polygon.layers.eachLayer((layer: any) => {
+      let l = layer.toGeoJSON().geometry;
+      l.type = l.type.toLocaleLowerCase();
+      l.id = layer.polygonId;
+      result.push(l);
+    });
+    this.drawEdited.emit(result[0]);
   }
 
-  onDrawDeleted() {
+  onDrawDeleted(polygon: any) {
     let result = [];
-    this.initialDrawn.eachLayer((layer) => {
-      if (layer instanceof L.Polygon && !(layer instanceof L.Rectangle)) {
-        result.push(layer.getLatLngs());
-      }
-    });
 
-    this.drawDeleted.emit(result);
+    polygon.layers.eachLayer((layer: any) => {
+      result.push(layer);
+    });
+    this.drawDeleted.emit(result[0]);
   }
   setPolygons(): void {
-    if (!isEmpty(this.polygons)) {
-      this.mapingPolygons(this.polygons, this.drawnItems, false, this.mode === FormMode.View, 'black');
+    if (!isEmpty(this.polygons) && this.map) {
+      this.drawnItems.clearLayers();
+      this.mappingPolygons(
+        this.polygons,
+        this.drawnItems,
+        this.config.map.showMarkerPolygon,
+        this.config.map.markerPolygonClickable,
+        this.config.form.mode === FormMode.View,
+        'black'
+      );
+    } else {
+      this.drawnItems.clearLayers();
     }
   }
 
   setWorkingPolygons(): void {
-    if (!isEmpty(this.polygonsToEdit)) {
-      this.mapingPolygons(this.polygonsToEdit, this.initialDrawn, this.showMarker, this.polygonClickable, 'red');
+    if (!isEmpty(this.polygonsToEdit) && this.map) {
+      this.initialDrawn.clearLayers();
+      this.mappingPolygons(
+        this.polygonsToEdit,
+        this.initialDrawn,
+        this.config.map.showMarkerPolygonToEdit,
+        this.config.map.markerPolygonToEditClickable,
+        this.config.map.polygonClickable,
+        'red'
+      );
     }
   }
 
-  mapingPolygons(polygons: [][], formGroup: FeatureGroup, showMarker: boolean, polygonClickable: boolean, color: string) {
+  mappingPolygons(
+    polygons: [][],
+    formGroup: FeatureGroup,
+    showMarker: boolean,
+    markerClickable: boolean,
+    polygonClickable: boolean,
+    color: string,
+    polygonSelectedColor?: string
+  ) {
     polygons.forEach((polygon: any) => {
-      const my_coors = polygon.coordinates.coordinates;
-      const latLngs_coordinates = my_coors.map((coord: any) => L.latLng(coord[1], coord[0]));
-      const poly = L.polygon(latLngs_coordinates, { color: color, interactive: true });
+      const my_coors = polygon?.coordinates?.coordinates;
+      const latLngs_coordinates = my_coors?.map((coord: any) =>
+        L.latLng(coord[1], coord[0])
+      );
+      const poly = L.polygon(latLngs_coordinates, {
+        color: polygon.isSelected ? polygonSelectedColor : color,
+        interactive: true,
+      });
+
+      Object.assign(poly, { polygonId: polygon.id, culture: polygon.culture });
       if (showMarker) {
         let bounds = poly.getBounds();
         let center = bounds.getCenter();
-        let marker = L.marker(center).addTo(this.map);
-        marker.on('click', (event) => this.markerClick(event, polygon));
+        let marker = L.marker(center, {
+          icon: iconsMap[polygon.culture],
+        });
+        if (markerClickable) {
+          marker.on('click', () => this.markerClick(marker));
+        }
+        marker.addTo(this.map);
+        this.markers.push(marker);
       }
       if (polygonClickable) {
-        poly.on('click', (event) => this.polygonClick(event, polygon));
+        poly.on('click', e => this.polygonClick(polygon, e));
       }
       formGroup?.addLayer(poly);
+      this.lLolygons.push(poly);
     });
   }
-  markerClick(event: any, polygon: any) {
-    this.markerClickAction.emit({ event, polygon });
+
+  markerClick(marker: any) {
+    this.markerClickAction.emit({ marker });
   }
 
-  polygonClick(event: any, polygon: any) {
-    this.polygonClickAction.emit({ event, polygon });
+  polygonClick(polygon: polygonCoordinates, event: any) {
+    switch (this.config.form.mode) {
+      case FormMode.Create:
+        let poly1 = this.polygonsToEdit.find(p => p === polygon);
+        poly1.isSelected = poly1.isSelected ? false : true;
+        let color1 = poly1.isSelected ? '#F7C04A' : 'red';
+        event.target.setStyle({ fillColor: color1, color1 });
+        break;
+      case FormMode.Edit:
+        let poly2 = this.polygonsToEdit.find(p => p === polygon);
+        poly2.isSelected = poly2.isSelected ? false : true;
+        let color2 = poly2.isSelected ? '#F7C04A' : 'black';
+        event.target.setStyle({ fillColor: color2, color2 });
+        break;
+      case FormMode.View:
+        this.polygonClickAction.emit({ polygon });
+        break;
+      default:
+        break;
+    }
   }
-  get mapStyle() {
-    return this.mode === FormMode.Create || this.mode === FormMode.Edit ? { 'height.vh': 70, 'width.px': 950 } : { 'height.vh': 90 };
+
+  get polygonsSelected() {
+    // @ts-ignore
+    return Object.groupBy(
+      this.polygonsToEdit.filter(p => p.isSelected),
+      item => item.parcelId
+    );
   }
 
   onMapReady($event: L.Map): void {
@@ -156,13 +208,75 @@ export class MapComponent implements OnInit, OnChanges {
     setTimeout(() => {
       this.map.invalidateSize();
       this.map.addLayer(this.drawnItems);
-    }, 0);
-  }
-  get drawOptions() {
-    return this.mode === FormMode.Edit || this.mode === FormMode.Create ? this.drawOptionsEnabled : drawOptionsDisabled;
+      this.redrawMap();
+    });
   }
 
-  // TODO pentru partea cu overlay polygons!!
+  get drawOptions() {
+    return (this.config.form.mode === FormMode.Edit ||
+      this.config.form.mode === FormMode.Create) &&
+      !includes(this.dezactivateEditOption, this.config.tab)
+      ? drawOptionsEnabled(this.initialDrawn)
+      : drawOptionsDisabled;
+  }
+
+  setZoom(value: any) {
+    this._zoom = value;
+
+    if (
+      this._zoom <= 14 &&
+      includes(this.dezactivateMarkerIcon, this.config.tab) &&
+      this.config.map.showMarkerPolygon
+    ) {
+      this.markers.forEach((marker: L.Marker) => this.map.removeLayer(marker));
+    } else if (
+      this._zoom >= 15 &&
+      includes(this.dezactivateMarkerIcon, this.config.tab) &&
+      this.config.map.showMarkerPolygon
+    ) {
+      this.markers.forEach((marker: L.Marker) => this.map.addLayer(marker));
+    }
+  }
+
+  redrawMap() {
+    this.cleanUpMap();
+    if (!isEmpty(this.polygonsToEdit)) {
+      this.setWorkingPolygons();
+    }
+
+    if (!isEmpty(this.polygons)) {
+      this.setPolygons();
+    }
+  }
+
+  pushPolygon(polygons: any) {
+    this.cleanUpMap();
+    this.mappingPolygons(
+      polygons,
+      this.drawnItems,
+      this.config.map.showMarkerPolygon,
+      this.config.map.markerPolygonClickable,
+      this.config.form.mode === FormMode.View,
+      'black'
+    );
+  }
+
+  cleanUpMap(removeCurrentPolygon?: boolean) {
+    this.markers.forEach((marker: L.Marker) => this.map.removeLayer(marker));
+    this.lLolygons.forEach((polygon: L.Polygon) =>
+      this.map.removeLayer(polygon)
+    );
+    this.initialDrawn.clearLayers();
+    this.drawnItems.clearLayers();
+    if (removeCurrentPolygon) {
+      this.polygons = [];
+      this.polygonsToEdit = [];
+    }
+  }
+
+  get zoom() {
+    return this._zoom;
+  }
 
   protected readonly FormMode = FormMode;
 }

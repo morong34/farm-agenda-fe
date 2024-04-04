@@ -1,19 +1,22 @@
 import { initialUserState, IUserState } from './user/user.state';
 import { initialParcelsState, IParcelsState } from './parcels/parcels.state';
 import { ICultureState, initialCulturesState } from './cultures/cultures.state';
-import { initialPolygonsState, IPolygonsState } from './polygons/polygons.state';
+import {
+  initialPolygonsState,
+  IPolygonsState,
+} from './polygons/polygons.state';
 
 export enum AppFeatures {
   USER = 'user',
   PARCELS = 'parcels',
   CULTURES = 'cultures',
-  POLYGONS = 'polygons'
+  POLYGONS = 'polygons',
 }
 export const initialAppState = {
   [AppFeatures.USER]: initialUserState,
   [AppFeatures.PARCELS]: initialParcelsState,
   [AppFeatures.CULTURES]: initialCulturesState,
-  [AppFeatures.POLYGONS]: initialPolygonsState
+  [AppFeatures.POLYGONS]: initialPolygonsState,
 };
 
 export type IAppState = Partial<{

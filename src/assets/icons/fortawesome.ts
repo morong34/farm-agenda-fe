@@ -1,0 +1,40 @@
+/* eslint-disable prettier/prettier */
+import {
+  faBasketShopping,
+  faBoxOpen,
+  faChevronLeft,
+  faClose,
+  faDashboard,
+  faFloppyDisk,
+  faLayerGroup,
+  faMapLocation,
+  faMapLocationDot,
+  faMessage,
+  faPenToSquare,
+  faPeopleGroup,
+  faSeedling,
+  faSliders,
+  faTractor,
+  faTrash,
+  faWheatAwn,
+} from '@fortawesome/free-solid-svg-icons';
+
+export const icons = {
+  'dashBoard': faDashboard,
+  'message': faMessage,
+  'basket': faBasketShopping,
+  'mapLocation': faMapLocation,
+  'wheat': faWheatAwn,
+  'layer': faLayerGroup,
+  'boxOpen': faBoxOpen,
+  'peopleGroup': faPeopleGroup,
+  'sliders': faSliders,
+  'tractor': faTractor,
+  'mapLocationDot': faMapLocationDot,
+  'trash': faTrash,
+  'pen': faPenToSquare,
+  'back': faChevronLeft,
+  'save': faFloppyDisk,
+  'seed': faSeedling,
+  'clear': faClose
+};

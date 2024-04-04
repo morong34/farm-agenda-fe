@@ -4,4 +4,7 @@ import { IParcelsState } from './parcels.state';
 
 const parcelsState = (state: IAppState) => state.parcels;
 
-export const selectParcels = createSelector(parcelsState, (parcelsResponse: IParcelsState) => parcelsResponse?.parcels);
+export const selectParcels = createSelector(
+  parcelsState,
+  (parcelsResponse: IParcelsState) => parcelsResponse?.parcels
+);

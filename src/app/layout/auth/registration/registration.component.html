@@ -1,21 +1,36 @@
 <div class="registration-container">
-    <h2>Register</h2>
-    <form (ngSubmit)="onSubmit(registrationForm)" #registrationForm="ngForm">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" [(ngModel)]="username" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" [(ngModel)]="password" required>
-      </div>
-      <div class="form-group">
-        <label for="confirmPassword">Confirm Password</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword" required>
-      </div>
-      <button type="submit">Register</button>
-    </form>
-    <div class="login-link">
-      <a href="/auth/login">Already have an account? Login here.</a>
+  <h2>Register</h2>
+  <form (ngSubmit)="onSubmit(registrationForm)" #registrationForm="ngForm">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input
+        type="text"
+        id="username"
+        name="username"
+        [(ngModel)]="username"
+        required />
     </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        [(ngModel)]="password"
+        required />
+    </div>
+    <div class="form-group">
+      <label for="confirmPassword">Confirm Password</label>
+      <input
+        type="password"
+        id="confirmPassword"
+        name="confirmPassword"
+        [(ngModel)]="confirmPassword"
+        required />
+    </div>
+    <button type="submit">Register</button>
+  </form>
+  <div class="login-link">
+    <a href="/auth/login">Already have an account? Login here.</a>
   </div>
+</div>

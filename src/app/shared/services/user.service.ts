@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpWrapperService } from './http-wrapper.service';
-import { Observable, publishReplay, refCount } from 'rxjs';
+import { Observable, publishReplay, refCount, tap } from 'rxjs';
 
 export interface IUser {
   id?: number;
@@ -31,23 +31,25 @@ export interface IUserResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   private _observable: Observable<IUser>;
-  private _currentUser: IUser;
+  loggedUser: IUser;
   constructor(private httpWrapper: HttpWrapperService) {}
 
   clearCache() {
-    this._currentUser = null;
+    this.loggedUser = null;
     this._observable = null;
   }
 
   currentUser(): Observable<IUser> {
     if (!this._observable) {
-      this._observable = this.httpWrapper.get<IUser>(`/api/v1/current_user`).pipe(publishReplay(1), refCount());
-      this._observable.subscribe((user) => {
-        this._currentUser = user;
+      this._observable = this.httpWrapper
+        .get<IUser>(`/api/v1/current_user`)
+        .pipe(publishReplay(1), refCount());
+      this._observable.subscribe(user => {
+        this.loggedUser = user;
       });
     }
 

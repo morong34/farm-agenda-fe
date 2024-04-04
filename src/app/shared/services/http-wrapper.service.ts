@@ -1,17 +1,26 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpResponse,
+} from '@angular/common/http';
 import { catchError, map, Observable, switchMap, throwError } from 'rxjs';
 import { EnvService } from './env.service';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HttpWrapperService {
   baseUrl = '';
 
-  constructor(private http: HttpClient, private envService: EnvService, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private envService: EnvService,
+    private router: Router
+  ) {
     this.loadEnvs();
   }
 
@@ -35,7 +44,10 @@ export class HttpWrapperService {
     const token: string | null = localStorage.getItem('auth_token');
     if (token) {
       options.headers = options.headers.set('Authorization', token);
-      options.headers = options.headers.set('Content-Type', 'application/vnd.api+json');
+      options.headers = options.headers.set(
+        'Content-Type',
+        'application/vnd.api+json'
+      );
     }
   }
 
@@ -88,30 +100,45 @@ export class HttpWrapperService {
   get<T>(url: string, params?: any): Observable<T> {
     return this.http
       .get(this.generateUrl(url), this.generateOptions(params))
-      .pipe(map(this.responseHandler.bind(this)), catchError(this.errorResponseHandler.bind(this)));
+      .pipe(
+        map(this.responseHandler.bind(this)),
+        catchError(this.errorResponseHandler.bind(this))
+      );
   }
 
   post<T>(url: string, body: any, options?: any): Observable<T> {
     return this.http
       .post(this.generateUrl(url), body, this.generateOptions(options))
-      .pipe(map(this.responseHandler.bind(this)), catchError(this.errorResponseHandler.bind(this)));
+      .pipe(
+        map(this.responseHandler.bind(this)),
+        catchError(this.errorResponseHandler.bind(this))
+      );
   }
 
   put<T>(url: string, body: any, options?: any): Observable<T> {
     return this.http
       .put(this.generateUrl(url), body, this.generateOptions(options))
-      .pipe(map(this.responseHandler.bind(this)), catchError(this.errorResponseHandler.bind(this)));
+      .pipe(
+        map(this.responseHandler.bind(this)),
+        catchError(this.errorResponseHandler.bind(this))
+      );
   }
 
   patch<T>(url: string, body: any, options?: any): Observable<T> {
     return this.http
       .patch(this.generateUrl(url), body, this.generateOptions(options))
-      .pipe(map(this.responseHandler.bind(this)), catchError(this.errorResponseHandler.bind(this)));
+      .pipe(
+        map(this.responseHandler.bind(this)),
+        catchError(this.errorResponseHandler.bind(this))
+      );
   }
 
   delete<T>(url: string, options?: any): Observable<T> {
     return this.http
       .delete(this.generateUrl(url), this.generateOptions(options))
-      .pipe(map(this.responseHandler.bind(this)), catchError(this.errorResponseHandler.bind(this)));
+      .pipe(
+        map(this.responseHandler.bind(this)),
+        catchError(this.errorResponseHandler.bind(this))
+      );
   }
 }

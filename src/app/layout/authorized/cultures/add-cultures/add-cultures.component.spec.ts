@@ -8,7 +8,7 @@ describe('AddCulturesComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [AddCulturesComponent]
+      imports: [AddCulturesComponent],
     });
     fixture = TestBed.createComponent(AddCulturesComponent);
     component = fixture.componentInstance;

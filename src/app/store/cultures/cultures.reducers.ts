@@ -3,7 +3,10 @@ import { ICulturesResponse } from '../../shared/services/culture.service';
 import { createReducer, on } from '@ngrx/store';
 import { CulturesLoaded, CulturesRemoved } from './cultures.actions';
 
-const setCultures = (state: ICultureState, { cultures }: { cultures: ICulturesResponse }) => ({ ...state, cultures });
+const setCultures = (
+  state: ICultureState,
+  { cultures }: { cultures: ICulturesResponse }
+) => ({ ...state, cultures });
 
 const removeCultures = (state: ICultureState) => ({ ...state, cultures: null });
 

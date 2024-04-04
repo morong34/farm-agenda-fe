@@ -9,12 +9,15 @@ export interface SettingsObject {
   [key: string]: string;
 }
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EnvService {
   envs;
   private envObservable: Observable<any> | null;
-  constructor(private httpClient: HttpClient, @Inject(ProxyEnvConfiguration) private proxyConfig: IProxyConfig) {}
+  constructor(
+    private httpClient: HttpClient,
+    @Inject(ProxyEnvConfiguration) private proxyConfig: IProxyConfig
+  ) {}
 
   clearCache() {
     this.envObservable = null;
@@ -36,7 +39,9 @@ export class EnvService {
     }
 
     if (!this.envObservable) {
-      this.envObservable = this.httpClient.get('/env').pipe(publishReplay(1), refCount());
+      this.envObservable = this.httpClient
+        .get('/env')
+        .pipe(publishReplay(1), refCount());
       this.envObservable.subscribe(() => {});
     }
 

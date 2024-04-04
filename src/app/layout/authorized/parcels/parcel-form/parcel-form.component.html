@@ -1,0 +1,15 @@
+@if (this.formIsReady) {
+  <app-information-form [config]="config" [parentFormGroup]="form">
+  </app-information-form>
+  <div class="p-2">
+    <app-map
+      [config]="config"
+      [polygons]="selectPolygonsCoordinatesSubscriptions$ | async"
+      [polygonsToEdit]="selectPolygonsCoordinatesToEditSubscriptions$ | async"
+      (drawCreated)="drawCreated($event)"
+      (drawEdited)="drawEdited($event)"
+      (drawDeleted)="drawDeleted($event)"></app-map>
+  </div>
+} @else {
+  <app-loader></app-loader>
+}

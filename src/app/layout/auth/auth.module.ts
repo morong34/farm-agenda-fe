@@ -9,7 +9,15 @@ import { RegistrationComponent } from './registration/registration.component';
 import { routes } from './auth.routes';
 
 @NgModule({
-  declarations: [AuthComponent, LoginComponent, RegistrationComponent],
-  imports: [CommonModule, FormsModule, SharedModule, RouterModule.forChild(routes), NgOptimizedImage]
+  imports: [
+    CommonModule,
+    FormsModule,
+    SharedModule,
+    RouterModule.forChild(routes),
+    NgOptimizedImage,
+    AuthComponent,
+    LoginComponent,
+    RegistrationComponent,
+  ],
 })
 export class AuthModule {}

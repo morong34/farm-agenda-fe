@@ -1,0 +1,33 @@
+@if (pageIsReady) {
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Parcel Preview</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="activeModal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <h3>Parcel name: {{ parcel?.attributes?.name }}</h3>
+    <h3>Topo nr: {{ parcel?.attributes?.topographic_number }}</h3>
+    @if (parcel?.attributes?.culture) {
+      <h3>Culture: {{ parcel?.attributes?.culture }}</h3>
+    }
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="activeModal.close('edit')">
+      Edit
+    </button>
+    @if (!hasCulture) {
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="activeModal.close('add_culture')">
+        Add Cultures
+      </button>
+    }
+  </div>
+}
