@@ -143,38 +143,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   initMenu(): void {
     this.menus = [
-      // {
-      //   key: 'dashboard',
-      //   label: 'Overview',
-      //   icon: 'filter_list',
-      //   hide: false,
-      //   type: 'expansion',
-      //   disabled: false,
-      //   subMenus: [
-      //     {
-      //       key: 'summary',
-      //       label: 'Summary',
-      //       icon: 'view_list',
-      //       hide: false,
-      //       disabled: true,
-      //       routerLink: 'dashboard/start'
-      //     },
-      //     {
-      //       key: 'summary',
-      //       label: 'Custom View',
-      //       icon: 'edit',
-      //       hide: true,
-      //       disabled: true,
-      //       routerLink: 'dashboard/custom-view'
-      //     }
-      //   ]
-      // },
       {
         key: 'dashboard',
         label: 'Overview',
         icon: this.icons['dashBoard'],
         routerLink: 'dashboard/start',
-        hide: false,
+        hide: true,
         disabled: true,
         onClick: false,
         type: 'itemMenu',
@@ -184,7 +158,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         label: 'Messages',
         icon: this.icons['message'],
         routerLink: 'd',
-        hide: false,
+        hide: true,
         disabled: true,
         onClick: false,
         type: 'itemMenu',
@@ -194,7 +168,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         label: 'Products',
         icon: this.icons['basket'],
         routerLink: 'c',
-        hide: false,
+        hide: true,
         disabled: true,
         onClick: false,
         type: 'itemMenu',
@@ -222,7 +196,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         label: 'Network',
         icon: this.icons['peopleGroup'],
         routerLink: 'b',
-        hide: false,
+        hide: true,
         disabled: true,
         onClick: false,
         type: 'itemMenu',
