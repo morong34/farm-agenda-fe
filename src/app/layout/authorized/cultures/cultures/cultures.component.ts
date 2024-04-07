@@ -139,7 +139,7 @@ export class CulturesComponent implements OnInit {
     } else {
       this.store
         .pipe(withLatestFrom(this.store.select(selectPolygonsCoordinates)))
-        .subscribe(( polygons) => this.map.pushPolygon(polygons));
+        .subscribe(( polygons) => this.map.pushPolygon(polygons[1]));
     }
   }
 

@@ -1,5 +1,6 @@
 import { FormGroup } from '@angular/forms';
 import { FormMode } from 'app/shared/helpers/forms/baseFormComponent';
+import { LatLng } from 'leaflet';
 
 export interface config {
   form?: { mode?: FormMode; parentFormGroup?: FormGroup };
@@ -11,5 +12,8 @@ export interface config {
     markerPolygonClickable?: boolean;
     markerPolygonToEditClickable?: boolean;
     showMarkerPolygonToEdit?: boolean;
+    center?: LatLng
+    zoom?: number;
+    enableSearch?: boolean
   };
 }

@@ -1,7 +1,6 @@
 import {
   ChangeDetectorRef,
   Component,
-  NgZone,
   OnDestroy,
   OnInit,
   ViewEncapsulation,
@@ -20,7 +19,6 @@ import {
   NgbDropdownToggle,
   NgbDropdownMenu,
   NgbDropdownItem,
-  NgbModal,
 } from '@ng-bootstrap/ng-bootstrap';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
@@ -37,8 +35,6 @@ import {
   AsyncPipe,
 } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { CultureService } from 'app/shared/services/culture.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { icons } from 'assets/icons/fortawesome';

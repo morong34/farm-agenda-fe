@@ -68,7 +68,7 @@ export class ParcelsComponent implements OnInit {
     if (this.editActivated) {
       this._snackBar.dismiss();
       this.zone.run(() => {
-        this.router.navigate([`/parcels/${event.polygon.parcelId}/edit`]);
+        this.router.navigate([`/parcels/${event.polygon.parcelId}/edit`, { center: '1' }]);
       });
     } else if (this.deleteActivated) {
       this.parcelService.delete(parseInt(event.polygon.parcelId)).subscribe(

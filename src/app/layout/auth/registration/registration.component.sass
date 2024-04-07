@@ -1,51 +1,26 @@
-.registration-container
-  max-width: 400px
-  margin: 0 auto
-  padding: 20px
-  border: 1px solid #ccc
-  border-radius: 5px
+@import "../../../../styles/variables.sass"
 
-  h2 
-    margin-top: 0
-  
-  form 
-    display: flex
-    flex-direction: column
-    margin-top: 10px
+.registration-page
+  background-image: url('../../../../assets/login.jpeg')
+  height: 100vh
+  background-position: center
+  background-repeat: no-repeat
+  background-size: cover
 
-    .form-group
-      display: flex
-      flex-direction: column
-      margin-bottom: 10px
+  .card 
+    top: 10%
+    left: 15%
+    width: 70%
+    height: 80%
+    border-radius: 50px
+    box-shadow: 0 2px 4px 0 rgb(34 36 38 / 12%), 0 2px 10px 0 rgb(34 36 38 / 15%)
 
-      label 
-        margin-bottom: 5px
-      input 
-        padding: 5px
-        border: 1px solid #ccc
-        border-radius: 5px
-        font-size: 16px
+    .card-title
+      font-family: "Pacifico", cursive
+      font-weight: 400
+      font-style: normal
+      text-align: center
+
+    .card-footer
+      text-align: center
       
-    button[type="submit"] 
-      background-color: #007bff
-      color: #fff
-      padding: 10px 20px
-      border: none
-      border-radius: 5px
-      font-size: 16px
-      cursor: pointer
-      transition: background-color 0.3s ease
-
-      &:hover 
-        background-color: #0069d9
-    
-  .register-link 
-    margin-top: 10px
-
-    a 
-      color: #007bff
-      text-decoration: none
-      transition: color 0.3s ease
-
-      &:hover 
-        color: #0069d9

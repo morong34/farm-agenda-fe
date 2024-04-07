@@ -1,6 +1,6 @@
 @if (!this.showMode) {
   <app-action-bar>
-    <app-action-bar-action routerLink="/parcels/add">
+    <app-action-bar-action [routerLink]="['/parcels/add']">
       <fa-icon [icon]="icons['mapLocationDot']"></fa-icon>
       Add
     </app-action-bar-action>

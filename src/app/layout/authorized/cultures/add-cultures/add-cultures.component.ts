@@ -21,7 +21,7 @@ import { SidebarService } from 'app/shared/services/sidebar.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { icons } from 'assets/icons/fortawesome';
 import { config } from '../../const';
-import { includes, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';

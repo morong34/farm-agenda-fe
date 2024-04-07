@@ -6,7 +6,7 @@
   [leafletOptions]="options"
   (leafletMapReady)="onMapReady($event)"
   [leafletDrawOptions]="drawOptions"
-  (leafletZoomChange)="setZoom($event)"
+  (leafletCenterChange)="setCenter($event)"
   (leafletDrawCreated)="onDrawCreated($event)"
   (leafletDrawEdited)="onDrawEdited($event)"
   (leafletDrawDeleted)="onDrawDeleted($event)">

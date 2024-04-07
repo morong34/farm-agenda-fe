@@ -1,10 +1,10 @@
-import { AfterContentInit, Component, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
 import {
   BaseFormComponent,
   FormMode,
 } from '../../../../shared/helpers/forms/baseFormComponent';
 import { ParcelFormComponent } from '../parcel-form/parcel-form.component';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { ParcelsService } from '../../../../shared/services/parcels.service';
 import { select, Store } from '@ngrx/store';
@@ -21,6 +21,7 @@ import { SidebarService } from 'app/shared/services/sidebar.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { icons } from 'assets/icons/fortawesome';
 import { config } from '../../const';
+import { da } from 'date-fns/locale';
 
 @Component({
   selector: 'app-add-parcels',
@@ -37,7 +38,7 @@ import { config } from '../../const';
 })
 export class AddParcelsComponent
   extends BaseFormComponent
-  implements AfterContentInit
+  implements OnInit, AfterContentInit
 {
   @ViewChild(ParcelFormComponent) parcelForm: ParcelFormComponent;
   config: config = {
@@ -53,10 +54,15 @@ export class AddParcelsComponent
     public store: Store<IAppState>,
     private parcelService: ParcelsService,
     private router: Router,
+    private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
     private sidebarService: SidebarService
   ) {
     super(formBuilder);
+  }
+
+  ngOnInit(): void {
+    this.route.data.subscribe((data) => this.config.map.center = data.center)
   }
 
   ngAfterContentInit() {
@@ -93,9 +99,7 @@ export class AddParcelsComponent
         this.store.dispatch(PolygonsRequested());
         this.router.navigate(['/parcels/parcels']);
       },
-      error => {
-        alert(error);
-      }
+      error => alert(error)
     );
   }
 

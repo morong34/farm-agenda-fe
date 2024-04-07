@@ -1,9 +1,9 @@
 import {
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
@@ -24,15 +24,17 @@ import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { config } from 'app/layout/authorized/const';
 import { polygonCoordinates } from 'app/store/polygons/polygons.selectors';
+import Geocoder from 'leaflet-control-geocoder';
+import { MarkGeocodeEvent } from 'leaflet-control-geocoder/dist/control';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.sass'],
   standalone: true,
-  imports: [LeafletModule, LeafletDrawModule, NgStyle, NgIf],
+  imports: [LeafletModule, LeafletDrawModule, NgStyle, NgIf]
 })
-export class MapComponent implements OnChanges {
+export class MapComponent implements OnInit, OnChanges {
   @Input() polygons: any = [];
   @Input() polygonsToEdit: any = [];
   @Input() config: config = {};
@@ -53,10 +55,16 @@ export class MapComponent implements OnChanges {
   drawnItems: FeatureGroup = featureGroup();
   dezactivateEditOption = ['add-culture'];
   dezactivateMarkerIcon = ['cultures', 'add-culture', 'edit-culture'];
+  searchResult: L.Marker;
 
   options = optionsMap;
 
   constructor() {}
+
+  ngOnInit(): void {
+    if (this.config?.map?.center) this.options.center = this.config?.map?.center;
+    if (this.config?.form?.mode === FormMode.Edit) this.options.zoom = 17;
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     this.markers = [];
@@ -158,6 +166,14 @@ export class MapComponent implements OnChanges {
         if (markerClickable) {
           marker.on('click', () => this.markerClick(marker));
         }
+        this.map.on('zoomend', () => {
+          const currentZoom = this.map.getZoom();
+          if (currentZoom > 14) {
+            marker.setOpacity(1); 
+          } else {
+            marker.setOpacity(0); 
+          }
+        });
         marker.addTo(this.map);
         this.markers.push(marker);
       }
@@ -209,7 +225,29 @@ export class MapComponent implements OnChanges {
       this.map.invalidateSize();
       this.map.addLayer(this.drawnItems);
       this.redrawMap();
+      if (this.config?.map?.enableSearch) this.addSearch()
     });
+  }
+
+  protected addSearch() {
+    const geocoderControl = new Geocoder({ defaultMarkGeocode: false}).on('markgeocode', (result: MarkGeocodeEvent) => {
+      this.searchResult = L.marker(result.geocode.center, {
+        icon: iconsMap['resultSearch'],
+        draggable: true
+      });
+      this.searchResult.addTo(this.map);
+    });
+    geocoderControl.addTo(this.map);
+  }
+
+  get returnSearchResult() {
+    return this.searchResult ?
+      `${this.searchResult.getLatLng().lat},${this.searchResult.getLatLng().lng}` :
+      navigator.geolocation.getCurrentPosition(
+      ((position) => `${position.coords.latitude}, ${position.coords.longitude}`),
+      ((err) => { console.error(err)})
+    );
+      
   }
 
   get drawOptions() {
@@ -218,24 +256,6 @@ export class MapComponent implements OnChanges {
       !includes(this.dezactivateEditOption, this.config.tab)
       ? drawOptionsEnabled(this.initialDrawn)
       : drawOptionsDisabled;
-  }
-
-  setZoom(value: any) {
-    this._zoom = value;
-
-    if (
-      this._zoom <= 14 &&
-      includes(this.dezactivateMarkerIcon, this.config.tab) &&
-      this.config.map.showMarkerPolygon
-    ) {
-      this.markers.forEach((marker: L.Marker) => this.map.removeLayer(marker));
-    } else if (
-      this._zoom >= 15 &&
-      includes(this.dezactivateMarkerIcon, this.config.tab) &&
-      this.config.map.showMarkerPolygon
-    ) {
-      this.markers.forEach((marker: L.Marker) => this.map.addLayer(marker));
-    }
   }
 
   redrawMap() {
@@ -276,6 +296,10 @@ export class MapComponent implements OnChanges {
 
   get zoom() {
     return this._zoom;
+  }
+
+  setCenter(value) {
+    this.options.center = new L.LatLng(value.lat, value.lng)
   }
 
   protected readonly FormMode = FormMode;

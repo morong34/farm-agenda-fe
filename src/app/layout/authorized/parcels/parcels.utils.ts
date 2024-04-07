@@ -3,6 +3,7 @@ import {
   IPolygon,
   IPolygonsResponse,
 } from '../../../shared/services/polygons.service';
+import { LatLng } from 'leaflet';
 
 export function buildParcelsPayload(
   name: string,
@@ -99,4 +100,8 @@ export function mapPolygonsHandler(
       clicked: false,
     };
   });
+}
+
+export function getCenter(polygon: any) {
+  return new LatLng(polygon.coordinates[2][1],polygon.coordinates[2][0]);
 }

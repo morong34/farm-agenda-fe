@@ -21,6 +21,7 @@ import { PolygonsService } from '../../../../shared/services/polygons.service';
 import {
   buildParcelsUpdatePayload,
   buildPolygonPayload,
+  getCenter
 } from '../parcels.utils';
 import { forkJoin } from 'rxjs';
 import { ActionBarActionComponent } from '../../../../shared/components/action-bar/action-bar-action/action-bar-action.component';
@@ -29,6 +30,7 @@ import { SidebarService } from 'app/shared/services/sidebar.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { icons } from 'assets/icons/fortawesome';
 import { config } from '../../const';
+import { LatLng } from 'leaflet';
 
 @Component({
   selector: 'app-edit-parcel',
@@ -74,13 +76,12 @@ export class EditParcelComponent
     this.sidebarService.title.next('Edit Parcels');
     this.route.data.subscribe(parcel => {
       this.parcel = parcel['parcel'];
+      this.config.map.center = getCenter(this.parcel.data.attributes.polygon[0])
     });
   }
 
   ngAfterContentInit() {
-    this.store.pipe(select(selectUser)).subscribe((result: IUser) => {
-      this.user = result;
-    });
+    this.store.pipe(select(selectUser)).subscribe((result: IUser) => (this.user = result));
   }
 
   save() {

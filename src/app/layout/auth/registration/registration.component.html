@@ -1,36 +1,99 @@
-<div class="registration-container">
-  <h2>Register</h2>
-  <form (ngSubmit)="onSubmit(registrationForm)" #registrationForm="ngForm">
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input
-        type="text"
-        id="username"
-        name="username"
-        [(ngModel)]="username"
-        required />
+<div class="registration-page">
+  <div class="card">
+    <div class="card-header card-title">
+      <h2>Registration</h2>
     </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input
-        type="password"
-        id="password"
-        name="password"
-        [(ngModel)]="password"
-        required />
+    <div class="card-body">
+      <div [ngSwitch]="regStage">
+        <ng-container *ngSwitchCase="stagesFace.basicInfo" [ngTemplateOutlet]="basiInfo"></ng-container>
+        <ng-container *ngSwitchCase="stagesFace.locationInfo" [ngTemplateOutlet]="locationInfo"></ng-container>
+        <ng-container *ngSwitchDefault [ngTemplateOutlet]="loginCredential"></ng-container>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="confirmPassword">Confirm Password</label>
-      <input
-        type="password"
-        id="confirmPassword"
-        name="confirmPassword"
-        [(ngModel)]="confirmPassword"
-        required />
+
+    <div class="card-footer">
+      <button mat-stroked-button routerLink="/auth/login">Login Page</button>
+      <button *ngIf="regStage !== stagesFace.basicInfo" mat-stroked-button (click)="this.previousStage()">Previous</button>
+      <button *ngIf="regStage !== stagesFace.loginCredential" mat-stroked-button (click)="this.nextStage()">Next</button>
+      <button *ngIf="form.valid" mat-stroked-button (click)="onSubmit()">Finish</button>
     </div>
-    <button type="submit">Register</button>
-  </form>
-  <div class="login-link">
-    <a href="/auth/login">Already have an account? Login here.</a>
   </div>
 </div>
+
+<ng-template #basiInfo>
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="col-12">
+        <div class="col-6">
+          <div>
+            <mat-label class="px-4">First Name</mat-label>
+            <mat-form-field appearance="outline" class="px-1 py-2">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="first_name" required/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-label class="px-4">Last Name</mat-label>
+            <mat-form-field appearance="outline" class="px-1 py-2">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="last_name" required/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-label class="px-4">Phone Number</mat-label>
+            <mat-form-field appearance="outline" class="px-1 py-2">
+              <mat-label>Phone number</mat-label>
+              <input matInput formControlName="phone_number"/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-label class="px-4">User Name</mat-label>
+            <mat-form-field appearance="outline" class="px-1 py-2">
+              <mat-label>User Name</mat-label>
+              <input matInput formControlName="username" required/>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-6">
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #locationInfo>
+  <h3>Your Address</h3>
+  <app-map [config]="config"></app-map>
+</ng-template>
+
+<ng-template #loginCredential>
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="col-12">
+        <div class="col-6">
+          <div>
+            <mat-label class="px-4">Email</mat-label>
+            <mat-form-field appearance="outline" class="px-1 py-2">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" required/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-label class="px-4">Password</mat-label>
+            <mat-form-field appearance="outline" class="px-1 py-2">
+              <mat-label>Password</mat-label>
+              <input matInput formControlName="password" required/>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-label class="px-4">Confirm Password</mat-label>
+            <mat-form-field appearance="outline" class="px-1 py-2">
+              <mat-label>Confirm Password</mat-label>
+              <input matInput formControlName="confirmPassword"/>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>

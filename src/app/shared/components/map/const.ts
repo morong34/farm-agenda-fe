@@ -21,16 +21,23 @@ const empty = L.icon({
   iconUrl: '../../../../assets/icons/undefined.png',
 });
 
+const resultSearch = L.icon({
+  iconSize: [40, 60],
+  iconAnchor: [15, 55],
+  iconUrl: '../../../../assets/icons/map-location.png',
+});
+
 export const iconsMap = {
   'maize': maizeIcon,
   'wheat': wheatIcon,
+  'resultSearch': resultSearch,
   null: empty,
   undefined: empty
 };
 
 export const optionsMap = {
   layers: [
-    L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+    L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
       maxZoom: 18,
       subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
     }),
